@@ -1,4 +1,4 @@
-% load testdata
+load testdata
 
 k = 20; % kernel size
 N = 100; % point sample size
