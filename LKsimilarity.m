@@ -10,7 +10,7 @@ function similarity = LKsimilarity(aPts, bPts, aKernels, bKernels, display)
     
     % pair up the kernels of nearest neighbors
     % note some aKernels will be paired with the same bKernel
-    kernels = [aKernels bKernels(nearestNeighbors, :) nnDist];
+    kernels = [aKernels(nearestNeighbors, :) bKernels nnDist];
 
     % apply machine learning model to 'kernels'
 
