@@ -1,4 +1,4 @@
-function T = LKMReg(aPts, bPts, k)
+function T = LKMReg(aPts, bPts, k, display)
 
     %{
         aPts and bPts are nx2 and mx2 matrictes representing point clouds to be registered
@@ -7,7 +7,19 @@ function T = LKMReg(aPts, bPts, k)
         T is a 2x3 matrix representing an affine transform which optimally
         maps aPts to bPts
     %}
+
+    %%%%%%%%%%
+    % set up display
+    %%%%%%%%%%
     
+    if display
+        subplot(1,2,1)
+        displayPoints(aPts,bPts)
+        set(gca,'FontSize',16)
+        title('Initial position')
+        drawnow
+    end
+
     %%%%%%%%%%
     % compute kernels
     %%%%%%%%%%
@@ -36,7 +48,7 @@ function T = LKMReg(aPts, bPts, k)
     
     % using anonymous function LKsim in order to use multiple parameters in
     % fminsearch
-    LKsim = @(t) LKsimilarity(transform(t, aPts), bPts, aKernels, bKernels);
+    LKsim = @(t) LKsimilarity(transform(t, aPts), bPts, aKernels, bKernels, display);
     
     % maybe a numerical gradient descent would be better than fminsearch
     T = fminsearch(LKsim, T0);

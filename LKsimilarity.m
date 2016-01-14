@@ -1,4 +1,4 @@
-function similarity = LKsimilarity(aPts, bPts, aKernels, bKernels)
+function similarity = LKsimilarity(aPts, bPts, aKernels, bKernels, display)
     %{
         compute the similarity of point clouds aPts and bPts,
         using precomputed kernels
@@ -14,8 +14,14 @@ function similarity = LKsimilarity(aPts, bPts, aKernels, bKernels)
 
     % apply machine learning model to 'kernels'
 
-    % placeholder
-    similarity = 1;
-
+    % (placeholder for machine learning model)
+    similarity = mean(nnDist);
+    
+    if display
+        subplot(1,2,2)
+        displayPoints(aPts,bPts)
+        set(gca,'FontSize',16)
+        drawnow
+    end
 end
 

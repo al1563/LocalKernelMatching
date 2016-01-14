@@ -12,4 +12,4 @@ aPts_sample = aPts(R1(1:N), :);
 bPts_sample = bPts(R2(1:N), :);
 
 % perform registration
-T = LKMReg(aPts_sample, bPts_sample, k);
+T = LKMReg(aPts_sample, bPts_sample, k, true);
