@@ -40,7 +40,6 @@ function T = LKMReg(aPts, bPts, k, display)
     %%%%%%%%%%
     
     T0 = [1 0 0; 0 1 0];
-    transform = @(t, pts) round((t * [pts'; ones(1, size(pts, 1))])');
         
     %%%%%%%%%%
     % optimize transform with respect to local kernel matching
@@ -48,7 +47,7 @@ function T = LKMReg(aPts, bPts, k, display)
     
     % using anonymous function LKsim in order to use multiple parameters in
     % fminsearch
-    LKsim = @(t) LKsimilarity(transform(t, aPts), bPts, aKernels, bKernels, display);
+    LKsim = @(t) LKsimilarity(affineTransform(t, aPts), bPts, aKernels, bKernels, display);
     
     % maybe a numerical gradient descent would be better than fminsearch
     T = fminsearch(LKsim, T0);
