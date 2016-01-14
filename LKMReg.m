@@ -24,16 +24,8 @@ function T = LKMReg(aPts, bPts, k, display)
     % compute kernels
     %%%%%%%%%%
     
-    % the first nearest neighbor to any point will be itself, so get one
-    % extra nearest neighbor and then remove the first one
-    [~, aKernels] = knnsearch(aPts, aPts, 'k', k + 1);
-    [~, bKernels] = knnsearch(bPts, bPts, 'k', k + 1);
-    aKernels(:, 1) = [];
-    bKernels(:, 1) = [];
-    
-    % normalize kernel rows, making kernels invariant to scaling
-    aKernels = normr(aKernels);
-    bKernels = normr(bKernels);
+    aKernels = computeKernels(aPts, k);
+    bKernels = computeKernels(bPts, k);
     
     %%%%%%%%%%
     % initialize transform
