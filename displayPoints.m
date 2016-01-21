@@ -3,12 +3,14 @@ function displayPoints(aPts, bPts)
     set(gca, 'FontSize', 12)
 
     hold off
-    plot(aPts(:, 1), aPts(:, 2), 'k+')
+    aPts.show('go')
     hold on
-    plot(bPts(:, 1), bPts(:, 2), 'go')
+    bPts.show('b.')
     axis equal
-    xlim([min(bPts(:, 1)) - 1.5, max(bPts(:, 1)) + 1.5])
-    ylim([min(bPts(:, 2)) - 1.5, max(bPts(:, 2)) + 1.5])
+    
+%     xlim([bPts.xmin - 1.5, bPts.xmax + 1.5])
+%     ylim([bPts.ymin - 1.5, bPts.ymax + 1.5])
 
     pbaspect([1, 1, 1])
+    drawnow
 end
