@@ -1,4 +1,4 @@
-function model = LKMTrain(ims, k, N)
+function mlModel = LKMTrain(ims, k, N)
 
     %{
         k: kernel size
@@ -41,9 +41,9 @@ function model = LKMTrain(ims, k, N)
         % determine pairs by pairing points at random from A and B.
         R1 = randperm(N);
         R2 = randperm(N);
-        xDistances = aPts(R1, 1) - bPts(R2, 1);
-        yDistances = aPts(R1, 2) - bPts(R2, 2);
-        distances = (xDistances .^ 2 + yDistances .^ 2) .^ .5;
+        aPtsRand = aPts(R1, :);
+        bPtsRand = bPts(R2, :);
+        distances = sum((aPtsRand - bPtsRand) .^ 2, 2) .^ 0.5;
         nonmatching = [aKernels(R1, :) bKernels(R2, :) distances];
         
         training = [training; matching; nonmatching];
@@ -52,9 +52,16 @@ function model = LKMTrain(ims, k, N)
     end
     
     % perform machine learning on the training set
+    opts            = [];
+    opts.ReguAlpha  = 0.01;  % [0.0001, 0.1]
+    opts.ReguType   = 'Ridge';
+    opts.gnd        = labels;   % groundtruth (flair vector length)
+    opts.KernelType = 'Gaussian';
+    opts.t          = 6;    % [4, 10]  
     
-    % placeholder
-    model = 1;
-    
+    K = constructKernel(training, training, opts);
+    [mlModel.eigvector, ~] = KSR(opts, labels, K);
+    mlModel.opts = opts;
+    mlModel.training = training;
 end
 
