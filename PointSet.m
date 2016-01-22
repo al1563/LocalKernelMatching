@@ -41,10 +41,6 @@ classdef PointSet
         function P = centerAtOrigin(ptset)
             P = PointSet(ptset.coords - repmat(ptset.centerOfGravity, ptset.nPts, 1));
         end
-        
-%         function P = centerAtCenter(ptset)
-%             P = PointSet(ptset.coords + repmat(ptset.centerOfGravity, ptset.nPts, 1));
-%         end
     end
     
 end
