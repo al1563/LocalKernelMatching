@@ -8,8 +8,8 @@ function unused = displayPoints(aPts, bPts)
     bPts.show('b.')
     axis equal
     
-%     xlim([bPts.xmin - 1.5, bPts.xmax + 1.5])
-%     ylim([bPts.ymin - 1.5, bPts.ymax + 1.5])
+    xlim([bPts.xmin - 1.5, bPts.xmax + 1.5])
+    ylim([bPts.ymin - 1.5, bPts.ymax + 1.5])
 
     pbaspect([1, 1, 1])
     drawnow
