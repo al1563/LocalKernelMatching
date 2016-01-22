@@ -1,4 +1,4 @@
-function displayPoints(aPts, bPts)
+function unused = displayPoints(aPts, bPts)
 
     set(gca, 'FontSize', 12)
 
@@ -13,4 +13,6 @@ function displayPoints(aPts, bPts)
 
     pbaspect([1, 1, 1])
     drawnow
+
+    unused = 1;
 end
