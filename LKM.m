@@ -109,7 +109,7 @@ classdef LKM
 
             if display
                 subplot(1, 2, 1)
-                displayPoints(aPts,bPts)
+                displayPoints(aPts,bPts);
                 set(gca,'FontSize',16)
                 title('Initial position')
                 drawnow
@@ -142,7 +142,7 @@ classdef LKM
             similarity = @(t) LKM.similarity(affineTransform(t).transform(aPts), ...
                 bPts, aKernels, bKernels, mlModel);
             show = @(t) displayPoints(affineTransform(t).transform(aPts), bPts);
-            
+                       
             if display
                 LKsim = @(t) curly({similarity(t), show(t)}, 1);
             else

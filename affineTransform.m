@@ -1,7 +1,5 @@
 classdef affineTransform
-    %AFFINETRANSFOR Summary of this class goes here
-    %   Detailed explanation goes here
-        
+    
     properties(Constant)
         % in order to search a normalize affine transform space,
         % normalize the transform parameters by these weights
