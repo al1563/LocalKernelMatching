@@ -25,10 +25,10 @@ classdef LKM
             kernels = [aKernels(nearestNeighbors, :) bKernels nnDist];
 
             % apply machine learning model to 'kernels'
-            Ktest = constructKernel(mlModel.training, kernels, mlModel.opts);
+            Ktest = constructKernel(kernels, mlModel.training, mlModel.opts);
             Yhat = Ktest * mlModel.eigvector;
 
-            sim = sum(Yhat);
+            sim = -sum(Yhat);
         end
         
         function mlModel = trainModel(ims, k, N)
@@ -90,7 +90,7 @@ classdef LKM
             mlModel.training = training;
         end
 
-        function T = register(A, B, k, mlModel, display)
+        function T = register(A, B, k, N, mlModel, display)
 
             % aPts and bPts are nx2 and mx2 matrictes representing point clouds to be registered
             % k is the number of nearest-neighbor points to use in each kernel
@@ -98,8 +98,8 @@ classdef LKM
             % T is a 2x3 matrix representing an affine transform which optimally
             % maps aPts to bPts
 
-            aPts = PointSet(A);
-            bPts = PointSet(B);
+            aPts = PointSet(A).randomSample(N);
+            bPts = PointSet(B).randomSample(N);
             aPts.centerAtOrigin();
             bPts.centerAtOrigin();
 
@@ -137,21 +137,30 @@ classdef LKM
 
             % using anonymous function LKsim in order to use multiple parameters in
             % fminsearch
-            LKsim = @(t) LKM.similarity(affineTransform(t).transform(aPts), ...
+            curly = @(x, varargin) x{varargin{:}};
+
+            similarity = @(t) LKM.similarity(affineTransform(t).transform(aPts), ...
                 bPts, aKernels, bKernels, mlModel);
+            show = @(t) displayPoints(affineTransform(t).transform(aPts), bPts);
+            
             if display
-                LKsim = @(t) {LKsim(t), displayPoints(t.transform(aPts), bPts)};
+                LKsim = @(t) curly({similarity(t), show(t)}, 1);
+            else
+                LKsim = similarity;
             end
 
             % maybe a numerical gradient descent would be faster than fminsearch
             T = fminsearch(LKsim, affineParams);
 
             %%%%%%%%%%
-            % wrap transform with centering at origin and then moving back
+            % wrap transform with centering at origin and then moving back,
+            % to preserve rotation about center of gravity
             %%%%%%%%%%
 
+            center = aPts.centerOfGravity;
             centerAtOrigin = [1 0, -center(1); 0 1, -center(2); 0 0 1];
             moveBack = [1 0 center(1); 0 1 center(2); 0 0 1];
+            T = affineTransform(T).toMatrix();
             T = moveBack * [T; 0 0 1] * centerAtOrigin;
             T = T(1:2, :);
 
